@@ -18,33 +18,50 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { SelectOption } from "@/components/types/select-option";
 
-const frameworks = [
-  {
-    value: "1",
-    label: "Next.js",
-  },
-  {
-    value: "2",
-    label: "SvelteKit",
-  },
-  {
-    value: "3",
-    label: "Nuxt.js",
-  },
-  {
-    value: "4",
-    label: "Remix",
-  },
-  {
-    value: "5",
-    label: "Astro",
-  },
-];
+interface ComboboxProps<
+  TData = SelectOption,
+  TValue extends keyof TData = keyof TData,
+  TLabel extends keyof TData = {
+    [K in keyof TData]: TData[K] extends string ? K : never;
+  }[keyof TData]
+> {
+  label?: string;
+  options?: TData[];
+  valueField?: TValue;
+  labelField?: TLabel;
+  defaultValue?: TData[TValue] | null;
+  onValueChange?: (value?: TData) => void;
+}
 
-export function ComboboxDemo() {
+export function Combobox<
+  TData,
+  TValue extends keyof TData,
+  TLabel extends {
+    [K in keyof TData]: TData[K] extends string ? K : never;
+  }[keyof TData]
+>({
+  label = "Select ...",
+  options = [],
+  valueField = "value" as TValue,
+  labelField = "label" as TLabel,
+  defaultValue = null,
+  onValueChange,
+}: ComboboxProps<TData, TValue, TLabel>) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
+
+  const displayValue = React.useMemo(() => {
+    if (defaultValue) {
+      const selectedOption = options.find(
+        (item) => item[valueField] === defaultValue
+      );
+
+      if (selectedOption) return getLabelField(selectedOption, labelField);
+    }
+
+    return label;
+  }, [defaultValue, options]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -53,37 +70,49 @@ export function ComboboxDemo() {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className="w-full justify-between"
         >
-          {value
-            ? frameworks.find((framework) => framework.value === value)?.label
-            : "Select framework..."}
+          {displayValue}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
-        <Command>
-          <CommandInput placeholder="Search framework..." />
+      <PopoverContent className="w-full p-0">
+        <Command
+          filter={(value, search, keywords = []) => {
+            const extendValue = value + " " + keywords.join(" ");
+            if (extendValue.toLowerCase().includes(search.toLowerCase())) {
+              return 1;
+            }
+            return 0;
+          }}
+        >
+          <CommandInput placeholder="Search ..." />
           <CommandList>
-            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandEmpty>Empty Data</CommandEmpty>
             <CommandGroup>
-              {frameworks.map((framework) => (
+              {options.map((item) => (
                 <CommandItem
-                  key={framework.value}
-                  value={framework.value}
+                  key={getValueField(item, valueField)}
+                  value={getValueField(item, valueField)}
+                  keywords={[getLabelField(item, labelField)]}
                   onSelect={(currentValue) => {
-                    console.log('currentValue', currentValue)
-                    setValue(currentValue === value ? "" : currentValue);
+                    if (currentValue === defaultValue) {
+                      onValueChange?.(undefined);
+                    } else {
+                      onValueChange?.(item);
+                    }
                     setOpen(false);
                   }}
                 >
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      value === framework.value ? "opacity-100" : "opacity-0"
+                      defaultValue === item[valueField]
+                        ? "opacity-100"
+                        : "opacity-0"
                     )}
                   />
-                  {framework.label}
+                  {getLabelField(item, labelField)}
                 </CommandItem>
               ))}
             </CommandGroup>
@@ -92,4 +121,20 @@ export function ComboboxDemo() {
       </PopoverContent>
     </Popover>
   );
+}
+
+function getValueField<TData, TValue extends keyof TData>(
+  item: TData,
+  valueField: TValue
+) {
+  const value = item[valueField];
+  return `${value}`;
+}
+
+function getLabelField<TData, TLabel extends keyof TData>(
+  item: TData,
+  labelField: TLabel
+) {
+  const label = item[labelField];
+  return typeof label === "string" ? label : `${label}`;
 }
