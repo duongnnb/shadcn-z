@@ -19,6 +19,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { SelectOption } from "@/components/types/select-option";
+import { getLabelField, getValueField } from "./combobox.utils";
 
 interface ComboboxProps<
   TData = SelectOption,
@@ -70,13 +71,13 @@ export function Combobox<
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between"
+          className="w-full justify-between overflow-hidden"
         >
-          {displayValue}
+          <p className="truncate">{displayValue}</p>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0">
+      <PopoverContent className="p-0 popover-content-width-full">
         <Command
           filter={(value, search, keywords = []) => {
             const extendValue = value + " " + keywords.join(" ");
@@ -103,16 +104,24 @@ export function Combobox<
                     }
                     setOpen(false);
                   }}
+                  className={cn(
+                    "bg-white",
+                    defaultValue === item[valueField] && "bg-accent"
+                  )}
                 >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      defaultValue === item[valueField]
-                        ? "opacity-100"
-                        : "opacity-0"
-                    )}
-                  />
-                  {getLabelField(item, labelField)}
+                  {/* <p>
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        defaultValue === item[valueField]
+                          ? "opacity-100"
+                          : "opacity-0"
+                      )}
+                      width={16}
+                      height={16}
+                    />
+                  </p> */}
+                  <p>{getLabelField(item, labelField)}</p>
                 </CommandItem>
               ))}
             </CommandGroup>
@@ -121,20 +130,4 @@ export function Combobox<
       </PopoverContent>
     </Popover>
   );
-}
-
-function getValueField<TData, TValue extends keyof TData>(
-  item: TData,
-  valueField: TValue
-) {
-  const value = item[valueField];
-  return `${value}`;
-}
-
-function getLabelField<TData, TLabel extends keyof TData>(
-  item: TData,
-  labelField: TLabel
-) {
-  const label = item[labelField];
-  return typeof label === "string" ? label : `${label}`;
 }
