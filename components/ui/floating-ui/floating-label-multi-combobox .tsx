@@ -4,7 +4,7 @@ import * as React from "react";
 import { Check, ChevronsUpDown, XCircle } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonProps } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -19,11 +19,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { SelectOption } from "@/components/types/select-option";
-import { getLabelField, getValueField } from "./combobox.utils";
+import { getLabelField, getValueField } from "../combobox/combobox.utils";
 import { Checkbox } from "../checkbox";
 import { Badge } from "../badge";
 import { FixMeLater } from "@/components/types/fix-me-later";
 import { get } from "http";
+import { FloatingLabel } from "./floating-label-input";
 
 interface ComboboxProps<
   TData = SelectOption,
@@ -31,7 +32,7 @@ interface ComboboxProps<
   TLabel extends keyof TData = {
     [K in keyof TData]: TData[K] extends string ? K : never;
   }[keyof TData]
-> {
+> extends Omit<ButtonProps, "defaultValue"> {
   label?: string;
   options?: TData[];
   valueField?: TValue;
@@ -40,7 +41,7 @@ interface ComboboxProps<
   onValueChange?: (value?: TData[]) => void;
 }
 
-export function MultiCombobox<
+export function FloatingMultiCombobox<
   TData,
   TValue extends keyof TData,
   TLabel extends {
@@ -53,6 +54,7 @@ export function MultiCombobox<
   labelField = "label" as TLabel,
   defaultValue = [],
   onValueChange,
+  id,
 }: ComboboxProps<TData, TValue, TLabel>) {
   const [open, setOpen] = React.useState(false);
   const [selectedValues, setSelectedValues] = React.useState<TData[]>(() => {
@@ -108,12 +110,8 @@ export function MultiCombobox<
   };
 
   const displayValue = React.useMemo(() => {
-    if (defaultValue.length === 0) {
-      return <p className="truncate">{label}</p>;
-    }
-
     return (
-      <div className="flex flex-wrap gap-0.5">
+      <div className="flex flex-wrap gap-0.5 pt-4">
         {defaultValue?.map((value) => {
           const option = options.find((item) => item[valueField] === value);
           return (
@@ -122,11 +120,11 @@ export function MultiCombobox<
               // className={cn(
               //   multiSelectVariants({ variant })
               // )}
-              className="py-0"
+              className="py-0 px-1 h-4"
             >
               <p>{option?.[labelField] as FixMeLater}</p>
               <XCircle
-                className="ml-2 h-4 w-4 cursor-pointer"
+                className="ml-2 size-3 cursor-pointer"
                 onClick={(event) => {
                   event.stopPropagation();
                   toggleOption(option as FixMeLater);
@@ -137,7 +135,15 @@ export function MultiCombobox<
         })}
       </div>
     );
-  }, [defaultValue, options, label, valueField, labelField, toggleOption]);
+  }, [defaultValue, options, valueField, labelField, toggleOption]);
+
+  const floatingInputValue = React.useMemo(() => {
+    if (defaultValue?.length > 0 || open) {
+      return "opening";
+    }
+
+    return "";
+  }, [defaultValue, open]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -146,9 +152,19 @@ export function MultiCombobox<
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between min-h-10 h-auto"
+          className="w-full justify-between min-h-10 h-auto relative py-0"
         >
           {displayValue}
+
+          <input
+            placeholder=" "
+            name={id}
+            value={floatingInputValue}
+            className="peer hidden"
+          />
+          <FloatingLabel htmlFor={id} className="text-left cursor-pointer">
+            {label}
+          </FloatingLabel>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>

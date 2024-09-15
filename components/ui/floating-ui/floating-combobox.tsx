@@ -127,18 +127,6 @@ export function FloatingCombobox<
                     defaultValue === item[valueField] && "bg-accent"
                   )}
                 >
-                  {/* <p>
-                    <Check
-                      className={cn(
-                        "mr-2 h-4 w-4",
-                        defaultValue === item[valueField]
-                          ? "opacity-100"
-                          : "opacity-0"
-                      )}
-                      width={16}
-                      height={16}
-                    />
-                  </p> */}
                   <p>{getLabelField(item, labelField)}</p>
                 </CommandItem>
               ))}
