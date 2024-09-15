@@ -1,4 +1,5 @@
 import { ComboboxDemo } from "@/components/demo/combobox.demo";
+import { FloatingComboboxDemo } from "@/components/demo/floating-combobox.demo";
 import { FloatingLabelInputDemo } from "@/components/demo/floating-label-input.demo";
 import { Button } from "@/components/ui/button";
 import { Combobox } from "@/components/ui/combobox/combobox";
@@ -13,6 +14,8 @@ export default function Home() {
         <ComboboxDemo />
 
         <FloatingLabelInputDemo />
+
+        <FloatingComboboxDemo />
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
         <a

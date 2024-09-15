@@ -19,13 +19,13 @@ const floatingLabelVariants = cva(
     variants: {
       size: {
         default: [
-          "text-xs leading-5",
+          "text-xs leading-5 right-4",
           "peer-focus:text-xs peer-placeholder-shown:text-sm",
           "peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2",
           "-translate-y-2 peer-focus:top-2 peer-focus:-translate-y-2",
         ],
-        sm: "-translate-y-2",
-        lg: "-translate-y-2",
+        sm: "",
+        lg: "",
       },
     },
     defaultVariants: {
@@ -55,7 +55,7 @@ const FloatingLabel = React.forwardRef<
 >(({ className, size, ...props }, ref) => {
   return (
     <Label
-      className={cn(floatingLabelVariants({ size }), className, "right-0")}
+      className={cn(floatingLabelVariants({ size }), className)}
       ref={ref}
       {...props}
     />
