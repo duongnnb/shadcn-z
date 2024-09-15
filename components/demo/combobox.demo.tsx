@@ -1,13 +1,14 @@
 "use client";
 
 import * as React from "react";
-import { Combobox } from "../ui/combobox/combobox";
 import { SelectOption } from "../types/select-option";
+import { Combobox, MultiCombobox } from "../ui/combobox";
 
 const frameworks: SelectOption[] = [
   {
     value: 1,
-    label: "Next.js (React)  (React)  (React)  (React)  (React)  (React)  (React)  (React) ", 
+    label:
+      "Next.js (React)  (React)  (React)  (React)  (React)  (React)  (React)  (React) ",
   },
   {
     value: 2,
@@ -57,7 +58,7 @@ const frameworks3 = [
   },
   {
     id: 2,
-    name: "SvelteKit",
+    name: "SvelteKit SvelteKit SvelteKit SvelteKit SvelteKit SvelteKit SvelteKit SvelteKit SvelteKit ",
   },
   {
     id: 3,
@@ -76,10 +77,10 @@ const frameworks3 = [
 export function ComboboxDemo() {
   const [value, setValue] = React.useState<number | undefined>(undefined);
   const [value2, setValue2] = React.useState<string | undefined>(undefined);
-  const [value3, setValue3] = React.useState<number | undefined >(undefined);
+  const [value3, setValue3] = React.useState<number[]>([]);
 
   return (
-    <div className="w-[200px] space-y-2">
+    <div className="w-[250px] space-y-2">
       <Combobox
         label="Select some label that is really long..."
         options={frameworks}
@@ -99,14 +100,15 @@ export function ComboboxDemo() {
           setValue2(newValue?.value);
         }}
       />
-      <Combobox
+      <MultiCombobox
+        label="MultiCombobox some label that is really long..."
         options={frameworks3}
         defaultValue={value3}
         valueField="id"
         labelField="name"
         onValueChange={(newValue) => {
-          console.log("newValue", newValue);
-          setValue3(newValue?.id);
+          // console.log("newValue", newValue);
+          setValue3(newValue?.map((item) => item.id) ?? []);
         }}
       />
     </div>

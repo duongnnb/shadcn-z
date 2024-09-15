@@ -62,7 +62,7 @@ export function Combobox<
     }
 
     return label;
-  }, [defaultValue, options]);
+  }, [defaultValue, options, label, valueField, labelField]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
