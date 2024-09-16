@@ -1,8 +1,15 @@
 "use client";
 
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { FloatingMultiCombobox } from "@/components/ui/floating-ui/floating-label-multi-combobox ";
 import { useState } from "react";
-import { FloatingCombobox } from "../ui/floating-ui/floating-combobox";
-import { FloatingMultiCombobox } from "../ui/floating-ui/floating-label-multi-combobox ";
 
 const colors = [
   { value: "1red", label: "Red" },
@@ -47,32 +54,28 @@ const colors = [
   { value: "36navy", label: "Navy" },
 ];
 
-export function FloatingComboboxDemo() {
-  const [selected, setSelected] = useState<string>('14lime');
-
+export default function FloatingLabelMultiComboboxPage() {
   const [value, setValue] = useState<string[]>(["6purple"]);
 
   return (
-    <div className="w-[300px] space-y-2">
-      <FloatingCombobox
-        label="Floating Label Combobox"
-        options={colors}
-        valueField="value"
-        labelField="label"
-        defaultValue={selected}
-        onValueChange={(value) => setSelected(value?.value ?? "")}
-        //   id="floating-combobox-demo"
-      />
-      <FloatingMultiCombobox
-        label="Floating Label Multi Combobox"
-        options={colors}
-        valueField="value"
-        labelField="label"
-        defaultValue={value}
-        onValueChange={(newValue) =>
-          setValue(newValue?.map((v) => v.value) ?? [])
-        }
-      />
+    <div className="flex w-full">
+      <Card className="w-72">
+        <CardHeader>
+          <CardDescription>Input</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <FloatingMultiCombobox
+            label="Floating Label Multi Combobox"
+            options={colors}
+            valueField="value"
+            labelField="label"
+            defaultValue={value}
+            onValueChange={(newValue) =>
+              setValue(newValue?.map((v) => v.value) ?? [])
+            }
+          />
+        </CardContent>
+      </Card>
     </div>
   );
 }

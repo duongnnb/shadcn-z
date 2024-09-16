@@ -111,15 +111,12 @@ export function FloatingMultiCombobox<
 
   const displayValue = React.useMemo(() => {
     return (
-      <div className="flex flex-wrap gap-0.5 pt-4">
+      <div className="flex flex-wrap gap-0.5 pt-4 pb-1">
         {defaultValue?.map((value) => {
           const option = options.find((item) => item[valueField] === value);
           return (
             <Badge
               key={value as FixMeLater}
-              // className={cn(
-              //   multiSelectVariants({ variant })
-              // )}
               className="py-0 px-1 h-4"
             >
               <p>{option?.[labelField] as FixMeLater}</p>

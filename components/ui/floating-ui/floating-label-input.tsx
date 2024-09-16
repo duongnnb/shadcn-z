@@ -12,7 +12,7 @@ export interface InputProps
 const floatingLabelVariants = cva(
   [
     "absolute top-2 transform transition-all start-4 z-10 origin-[0] duration-300 truncate select-none",
-    "text-gray-500 bg-background dark:bg-background peer-focus:secondary peer-focus:dark:secondary",
+    "text-gray-500 peer-focus:secondary peer-focus:dark:secondary",
     "rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4"
   ],
   {
