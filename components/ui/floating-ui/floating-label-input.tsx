@@ -3,7 +3,6 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { v4 as uuidv4 } from "uuid";
 import { cva, VariantProps } from "class-variance-authority";
 
 export interface InputProps
@@ -13,7 +12,7 @@ const floatingLabelVariants = cva(
   [
     "absolute top-2 transform transition-all start-4 z-10 origin-[0] duration-300 truncate select-none",
     "text-gray-500 peer-focus:secondary peer-focus:dark:secondary",
-    "rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4"
+    "rtl:peer-focus:left-auto rtl:peer-focus:translate-x-1/4",
   ],
   {
     variants: {
@@ -68,11 +67,21 @@ type FloatingLabelInputProps = InputProps & { label?: string };
 const FloatingLabelInput = React.forwardRef<
   React.ElementRef<typeof FloatingInput>,
   React.PropsWithoutRef<FloatingLabelInputProps>
->(({ id = uuidv4(), label, ...props }, ref) => {
+>(({ id, label, ...props }, ref) => {
+
+  const localRef = React.useRef<HTMLInputElement>(null);
+  const inputRef = (ref as React.RefObject<HTMLInputElement>) || localRef;
+
+  const handleLabelClick = () => {
+    inputRef.current?.focus();
+  };
+
   return (
     <div className="relative overflow-hidden">
-      <FloatingInput ref={ref} id={id} {...props} />
-      <FloatingLabel htmlFor={id}>{label}</FloatingLabel>
+      <FloatingInput ref={inputRef} id={id} {...props} />
+      <FloatingLabel htmlFor={id} onClick={handleLabelClick}>
+        {label}
+      </FloatingLabel>
     </div>
   );
 });

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronsUpDown, XCircle } from "lucide-react";
+import { Check, ChevronsUpDown, X, XCircle } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button, ButtonProps } from "@/components/ui/button";
@@ -111,25 +111,33 @@ export function FloatingMultiCombobox<
 
   const displayValue = React.useMemo(() => {
     return (
-      <div className="flex flex-wrap gap-0.5 pt-4 pb-1">
-        {defaultValue?.map((value) => {
-          const option = options.find((item) => item[valueField] === value);
-          return (
-            <Badge
-              key={value as FixMeLater}
-              className="py-0 px-1 h-4"
-            >
-              <p>{option?.[labelField] as FixMeLater}</p>
-              <XCircle
-                className="ml-2 size-3 cursor-pointer"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  toggleOption(option as FixMeLater);
-                }}
-              />
-            </Badge>
-          );
-        })}
+      <div className="inline-flex w-full items-center h-full box-border truncate mr-1 pt-4">
+        <div className="flex flex-wrap w-full gap-1 py-0.5 text-md">
+          {defaultValue?.map((value) => {
+            const option = options.find((item) => item[valueField] === value);
+            return (
+              <div
+                key={value as FixMeLater}
+                className={cn(
+                  "flex gap-1 text-white rounded-sm cursor-default bg-primary"
+                )}
+              >
+                <div className="px-1 text-left text-wrap">
+                  {option?.[labelField] as FixMeLater}
+                </div>
+                <div className="flex items-center px-1.5 bg-transparent rounded-full hover:opacity-50 cursor-pointer">
+                  <XCircle
+                    className="ml-2 size-3 cursor-pointer"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      toggleOption(option as FixMeLater);
+                    }}
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   }, [defaultValue, options, valueField, labelField, toggleOption]);
