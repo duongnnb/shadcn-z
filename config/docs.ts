@@ -31,6 +31,16 @@ export const docsConfig: DocsConfig = {
           href: "/examples/floating-label-multi-combobox",
           items: [],
         },
+        {
+          title: "Floating Label Combobox Virtualized",
+          href: "/examples/floating-label-combobox-virtualized",
+          items: [],
+        },
+        {
+          title: "Floating Label Multi Combobox Virtualized",
+          href: "/examples/floating-label-multi-combobox-virtualized",
+          items: [],
+        },
       ],
     },
   ],

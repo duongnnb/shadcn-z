@@ -166,6 +166,7 @@ export function FloatingMultiCombobox<
             name={id}
             value={floatingInputValue}
             className="peer hidden"
+            readOnly
           />
           <FloatingLabel htmlFor={id} className="text-left cursor-pointer">
             {label}

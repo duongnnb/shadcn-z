@@ -69,11 +69,11 @@ export function FloatingCombobox<
 
   const floatingInputValue = React.useMemo(() => {
     if (defaultValue || open) {
-        return "opening"
+      return "opening";
     }
 
     return "";
-    }, [defaultValue, open]);
+  }, [defaultValue, open]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -87,11 +87,13 @@ export function FloatingCombobox<
           <p className="truncate pt-3">{displayValue}</p>
           <input
             placeholder=" "
-            name={id}
             value={floatingInputValue}
             className="peer hidden"
+            readOnly
           />
-          <FloatingLabel htmlFor={id} className="text-left cursor-pointer">{label}</FloatingLabel>
+          <FloatingLabel className="text-left cursor-pointer">
+            {label}
+          </FloatingLabel>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
